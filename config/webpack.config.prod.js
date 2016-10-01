@@ -1,4 +1,4 @@
-var autoprefixer = require('autoprefixer')
+var cssnext = require('postcss-cssnext')
 var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
@@ -104,7 +104,7 @@ module.exports = {
 
       },
       // The notation here is somewhat confusing.
-      // "postcss" loader applies autoprefixer to our CSS.
+      // "postcss" loader applies cssnext to our CSS.
       // "css" loader resolves paths in CSS and adds assets as dependencies.
       // "style" loader normally turns CSS into JS modules injecting <style>,
       // but unlike in development configuration, we do something different.
@@ -117,16 +117,7 @@ module.exports = {
       // in the main CSS file.
       {
         test: /\.css$/,
-        // "?-autoprefixer" disables autoprefixer in css-loader itself:
-        // https://github.com/webpack/css-loader/issues/281
-        // We already have it thanks to postcss. We only pass this flag in
-        // production because "css" loader only enables autoprefixer-powered
-        // removal of unnecessary prefixes when Uglify plugin is enabled.
-        // Webpack 1.x uses Uglify plugin as a signal to minify *all* the assets
-        // including CSS. This is confusing and will be removed in Webpack 2:
-        // https://github.com/webpack/webpack/issues/283
-        loader: ExtractTextPlugin.extract('style', 'css?-autoprefixer!postcss'),
-        // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+        loader: ExtractTextPlugin.extract('style', 'css!postcss'),
       },
       // JSON is not enabled by default in Webpack but both Node and Browserify
       // allow it implicitly so we also enable it.
@@ -156,17 +147,10 @@ module.exports = {
     ],
   },
 
-  // We use PostCSS for autoprefixing only.
+  // We use PostCSS for cssnext.
   postcss: function () {
     return [
-      autoprefixer({
-        browsers: [
-          '>1%',
-          'last 4 versions',
-          'Firefox ESR',
-          'not ie < 9', // React doesn't support IE8 anyway
-        ],
-      }),
+      cssnext(),
     ]
   },
   plugins: [

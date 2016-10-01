@@ -1,0 +1,8 @@
+# Browsers we support, used by postcss autoprefixer
+
+> 1%
+last 4 versions
+Firefox ESR
+Explorer >= 10
+Safari >= 8
+iOS >= 8

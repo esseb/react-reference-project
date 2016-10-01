@@ -1,4 +1,4 @@
-var autoprefixer = require('autoprefixer')
+var cssnext = require('postcss-cssnext')
 var webpack = require('webpack')
 var findCacheDir = require('find-cache-dir')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -106,7 +106,7 @@ module.exports = {
           }),
         },
       },
-      // "postcss" loader applies autoprefixer to our CSS.
+      // "postcss" loader applies cssnext to our CSS.
       // "css" loader resolves paths in CSS and adds assets as dependencies.
       // "style" loader turns CSS into JS modules that inject <style> tags.
       // In production, we use a plugin to extract that CSS to a file, but
@@ -144,17 +144,10 @@ module.exports = {
     ],
   },
 
-  // We use PostCSS for autoprefixing only.
+  // We use PostCSS for cssnext and autoprefixing.
   postcss: function () {
     return [
-      autoprefixer({
-        browsers: [
-          '>1%',
-          'last 4 versions',
-          'Firefox ESR',
-          'not ie < 9', // React doesn't support IE8 anyway
-        ],
-      }),
+      cssnext(),
     ]
   },
   plugins: [
