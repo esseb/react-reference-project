@@ -55,10 +55,12 @@
     "whatwg-fetch": "1.0.0"
   },
   "dependencies": {
+    "express": "^4.14.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2"
   },
   "scripts": {
+    "server": "node server/server.js",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
