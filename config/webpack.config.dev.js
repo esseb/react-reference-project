@@ -1,5 +1,7 @@
-var cssnext = require('postcss-cssnext')
-var StyleLintPlugin = require('stylelint-webpack-plugin')
+var stylelint = require('stylelint')
+var postcssNext = require('postcss-cssnext')
+var postcssReporter = require('postcss-reporter')
+var postcssBrowserReporter = require('postcss-browser-reporter')
 var webpack = require('webpack')
 var findCacheDir = require('find-cache-dir')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -148,7 +150,10 @@ module.exports = {
   // We use PostCSS for cssnext and autoprefixing.
   postcss: function () {
     return [
-      cssnext(),
+      stylelint(),
+      postcssNext(),
+      postcssBrowserReporter(),
+      postcssReporter({ clearMessages: true }),
     ]
   },
   plugins: [
@@ -177,12 +182,6 @@ module.exports = {
     // makes the discovery automatic so you don't have to restart.
     // See https://github.com/facebookincubator/create-react-app/issues/186
     new WatchMissingNodeModulesPlugin(paths.appNodeModules),
-    // Lint CSS.
-    new StyleLintPlugin({
-      configFile: '.stylelintrc',
-      files: '**/*.css',
-      failOnError: false,
-    }),
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.

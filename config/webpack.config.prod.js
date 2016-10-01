@@ -1,4 +1,4 @@
-var cssnext = require('postcss-cssnext')
+var postcssNext = require('postcss-cssnext')
 var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
@@ -150,7 +150,7 @@ module.exports = {
   // We use PostCSS for cssnext.
   postcss: function () {
     return [
-      cssnext(),
+      postcssNext(),
     ]
   },
   plugins: [

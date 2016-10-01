@@ -8,8 +8,8 @@
 }
 
 .app__header {
-  color: white;
   background-color: #222222;
+  color: white;
   height: 150px;
   padding: 20px;
 }

@@ -59,6 +59,8 @@ function setupCompiler (host, port, protocol) {
   // "done" event fires when Webpack has finished recompiling the bundle.
   // Whether or not you have warnings or errors, you will get this event.
   compiler.plugin('done', function (stats) {
+    // TODO(esseb): Clearing the console makes the `postcss-reporter` errors
+    // disappear.
     clearConsole()
 
     // We have switched off the default Webpack output in WebpackDevServer
