@@ -1,0 +1,19 @@
+{
+  "extends": "stylelint-config-standard",
+  "ignoreFiles": ["node_modules/**/*.css", "build/**/*.css"],
+  "rules": {
+    "at-rule-empty-line-before": null,
+    "color-hex-length": "long",
+    "declaration-block-no-duplicate-properties": true,
+    "declaration-block-no-redundant-longhand-properties": null,
+    "declaration-block-properties-order": "alphabetical",
+    "declaration-no-important": true,
+    "property-no-vendor-prefix": true,
+    "selector-no-id": true,
+    "selector-no-vendor-prefix": true,
+    "selector-pseudo-element-colon-notation": null,
+    "shorthand-property-no-redundant-values": null,
+    "string-no-newline": null,
+    "value-no-vendor-prefix": true,
+  }
+}
