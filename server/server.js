@@ -1,15 +1,25 @@
 var express = require('express')
+var exphbs = require('express-handlebars')
 
-// API routes
 var pets = require('./api/pets')
 
 var app = express()
 
+// Set up the view directory.
+// "./views" is the default, but setting it here makes the magic explicit for
+// anyone who later wonders where Express knows where to find the templates
+app.set('views', './views')
+
+// Use Handlebars as our template engine
+app.engine('.hbs', exphbs({extname: '.hbs'}))
+app.set('view engine', 'handlebars')
+
+// Set up API routes
 app.use('/api/pets', pets)
 
-// Respond with "hello world" when a GET request is made to the homepage
+// Load ./views/index.hbs when a GET request is made to the homepage
 app.get('/', function (req, res) {
-  res.send('hello world')
+  res.render('index.hbs', { title: 'React Reference Project' })
 })
 
 app.listen(3000, function () {
