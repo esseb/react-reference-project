@@ -39,6 +39,12 @@
   rules: {
     // http://eslint.org/docs/rules/
     'comma-dangle': ['error', 'always-multiline'],
+    "max-len": [1, 80, 4, {
+      ignoreComments: true,
+      ignoreUrls: true,
+      // Ignore long import statements and long const export statements
+      ignorePattern: "(^import\\s.+\\sfrom\\s.+;$)|(^export\\sconst\\s.+\\s=\\s'.+';$)"
+    }],
 
     // https://github.com/yannickcr/eslint-plugin-react/tree/master/docs/rules
     'react/jsx-equals-spacing': ['error', 'never'],
