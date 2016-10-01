@@ -1,0 +1,67 @@
+// Based on https://github.com/facebookincubator/create-react-app/tree/master/packages/eslint-config-react-app
+
+{
+  extends: 'standard',
+  parser: 'babel-eslint',
+  plugins: ['jsx-a11y', 'react'],
+
+  env: {
+    browser: true,
+    commonjs: true,
+    es6: true,
+    jest: true,
+    node: true
+  },
+
+  parserOptions: {
+    ecmaVersion: 6,
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+      generators: true,
+      experimentalObjectRestSpread: true
+    }
+  },
+
+  settings: {
+    'import/ignore': [
+      'node_modules',
+      '\\.(json|css|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$',
+    ],
+    'import/extensions': ['.js'],
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.json']
+      }
+    }
+  },
+
+  rules: {
+    // http://eslint.org/docs/rules/
+    'comma-dangle': ['error', 'always-multiline'],
+
+    // https://github.com/yannickcr/eslint-plugin-react/tree/master/docs/rules
+    'react/jsx-equals-spacing': ['error', 'never'],
+    'react/jsx-no-duplicate-props': ['error', { ignoreCase: true }],
+    'react/jsx-no-undef': 'error',
+    'react/jsx-pascal-case': ['error', {
+      allowAllCaps: true,
+      ignore: [],
+    }],
+    'react/jsx-uses-react': 'error',
+    'react/jsx-uses-vars': 'error',
+    'react/no-danger-with-children': 'error',
+    'react/no-deprecated': 'error',
+    'react/no-direct-mutation-state': 'error',
+    'react/no-is-mounted': 'error',
+    'react/react-in-jsx-scope': 'error',
+    'react/require-render-return': 'error',
+    'react/style-prop-object': 'error',
+
+    // https://github.com/evcohen/eslint-plugin-jsx-a11y/tree/master/docs/rules
+    'jsx-a11y/aria-role': 'error',
+    'jsx-a11y/img-has-alt': 'error',
+    'jsx-a11y/img-redundant-alt': 'error',
+    'jsx-a11y/no-access-key': 'error'
+  }
+}
