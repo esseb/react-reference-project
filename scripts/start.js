@@ -1,5 +1,15 @@
 process.env.NODE_ENV = 'development'
 
+// Transpiler is required for server-side React rendering
+require('babel-register')({
+  plugins: [
+    [
+      'babel-plugin-transform-require-ignore',
+      {extensions: ['.css', '.svg']},
+    ],
+  ],
+})
+
 // Load environment variables from .env file. Surpress warnings using silent
 // if this file is missing. dotenv will never modify any environment variables
 // that have already been set.
@@ -19,6 +29,7 @@ var prompt = require('react-dev-utils/prompt')
 var config = require('../config/webpack.config.dev')
 var paths = require('../config/paths')
 var app = require('../server/server')
+var handleRender = require('./handle-render')
 
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
@@ -47,8 +58,6 @@ function setupCompiler (host, port, protocol) {
   // "done" event fires when Webpack has finished recompiling the bundle.
   // Whether or not you have warnings or errors, you will get this event.
   compiler.plugin('done', function (stats) {
-    // TODO(esseb): Clearing the console makes the `postcss-reporter` errors
-    // disappear.
     clearConsole()
 
     // We have switched off the default Webpack output in WebpackDevServer
@@ -111,6 +120,10 @@ function runDevServer (host, port, protocol) {
 
   app.use(webpackHotMiddleware(compiler))
 
+  // Serve normal requests with our handleRender function.
+  app.get('*', handleRender())
+
+  // Start the server
   app.listen(port, (err, result) => {
     if (err) {
       return console.log(err)
