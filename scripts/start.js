@@ -3,17 +3,14 @@ process.env.NODE_ENV = 'development'
 // Transpiler is required for server-side React rendering
 require('babel-register')({
   plugins: [
-    [
-      'babel-plugin-transform-require-ignore',
-      {extensions: ['.css']},
-    ],
-    [
-      'babel-plugin-transform-assets',
-      {
-        extensions: ['.svg'],
-        name: '/static/media/[name].[hash:8].[ext]',
-      },
-    ],
+    // Completely ignore importing CSS files
+    ['babel-plugin-transform-require-ignore', {extensions: ['.css']}],
+    // Give imported SVG files a path identical to the path given to the files
+    // by the "file" loader defined in "webpack.config.dev.js"
+    ['babel-plugin-transform-assets', {
+      extensions: ['.svg'],
+      name: '/static/media/[name].[hash:8].[ext]',
+    }],
   ],
 })
 
