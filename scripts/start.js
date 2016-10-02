@@ -62,7 +62,8 @@ function setupCompiler (host, port, protocol) {
       console.log('  ' + chalk.cyan(protocol + '://' + host + ':' + port + '/'))
       console.log()
       console.log('Note that the development build is not optimized.')
-      console.log('To create a production build, use ' + chalk.cyan('npm run build') + '.')
+      console.log('To create a production build, use ' +
+        chalk.cyan('npm run build') + '.')
       console.log()
     }
 
@@ -87,8 +88,14 @@ function setupCompiler (host, port, protocol) {
       })
       // Teach some ESLint tricks.
       console.log('You may use special comments to disable some warnings.')
-      console.log('Use ' + chalk.yellow('// eslint-disable-next-line') + ' to ignore the next line.')
-      console.log('Use ' + chalk.yellow('/* eslint-disable */') + ' to ignore all warnings in a file.')
+      console.log(
+        'Use ' + chalk.yellow('// eslint-disable-next-line') +
+        ' to ignore the next line.'
+      )
+      console.log(
+        'Use ' + chalk.yellow('/* eslint-disable */') +
+        ' to ignore all warnings in a file.'
+      )
     }
   })
 }
@@ -99,11 +106,13 @@ function onProxyError (proxy) {
   return function (err, req, res) {
     var host = req.headers && req.headers.host
     console.log(
-      chalk.red('Proxy error:') + ' Could not proxy request ' + chalk.cyan(req.url) +
+      chalk.red('Proxy error:') +
+      ' Could not proxy request ' + chalk.cyan(req.url) +
       ' from ' + chalk.cyan(host) + ' to ' + chalk.cyan(proxy) + '.'
     )
     console.log(
-      'See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (' +
+      'See https://nodejs.org/api/errors.html#errors_common_system_errors' +
+      ' for more information (' +
       chalk.cyan(err.code) + ').'
     )
     console.log()
@@ -140,9 +149,18 @@ function addMiddleware (devServer) {
   }))
   if (proxy) {
     if (typeof proxy !== 'string') {
-      console.log(chalk.red('When specified, "proxy" in package.json must be a string.'))
-      console.log(chalk.red('Instead, the type of "proxy" was "' + typeof proxy + '".'))
-      console.log(chalk.red('Either remove "proxy" from package.json, or make it a string.'))
+      console.log(
+        chalk.red('When specified, "proxy" in package.json must be a string.')
+      )
+      console.log(
+        chalk.red('Instead, the type of "proxy" was "' + typeof proxy + '".')
+      )
+      console.log(
+        chalk.red(
+          'Either remove "proxy" from package.json,' +
+          ' or make it a string.'
+        )
+      )
       process.exit(1)
     }
 
@@ -152,7 +170,7 @@ function addMiddleware (devServer) {
     // - /*.hot-update.json (WebpackDevServer uses this too for hot reloading)
     // - /sockjs-node/* (WebpackDevServer uses this for hot reloading)
     // Tip: use https://jex.im/regulex/ to visualize the regex
-    var mayProxy = /^(?!\/(index\.html$|.*\.hot-update\.json$|sockjs-node\/)).*$/
+    var mayProxy = /^(?!\/(index\.html$|.*\.hot-update\.json$|sockjs-node\/)).*$/ // eslint-disable-line max-len
     devServer.use(mayProxy,
       // Pass the scope regex both to Express and to the middleware for proxying
       // of both HTTP and WebSockets to work without false positives.
