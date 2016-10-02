@@ -14,11 +14,12 @@ var filesize = require('filesize')
 var gzipSize = require('gzip-size').sync
 var rimrafSync = require('rimraf').sync
 var webpack = require('webpack')
-var config = require('../config/webpack.config.prod')
-var paths = require('../config/paths')
 var checkRequiredFiles = require('react-dev-utils/checkRequiredFiles')
 var recursive = require('recursive-readdir')
 var stripAnsi = require('strip-ansi')
+
+var config = require('../config/webpack.config.prod')
+var paths = require('../config/paths')
 
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
@@ -107,6 +108,27 @@ function printFileSizes (stats, previousSizeMap) {
   })
 }
 
+// Create "assets.json" for use with "index.hbs"
+function createAssetsList (stats) {
+  var jsAssets = stats.toJson().assets
+    .filter(asset => /\.js$/.test(asset.name))
+    .map(asset => asset.name)
+
+  var cssAssets = stats.toJson().assets
+    .filter(asset => /\.css$/.test(asset.name))
+    .map(asset => asset.name)
+
+  var assets = {
+    js: jsAssets,
+    css: cssAssets,
+  }
+
+  var assetsListFilename = path.join(paths.appBuild, 'assets.json')
+  var assetsListContent = JSON.stringify(assets, null, 2)
+
+  fs.writeFileSync(assetsListFilename, assetsListContent)
+}
+
 // Create the production build and print the deployment instructions.
 function build (previousSizeMap) {
   console.log('Creating an optimized production build...')
@@ -125,7 +147,8 @@ function build (previousSizeMap) {
     printFileSizes(stats, previousSizeMap)
     console.log()
 
-    var openCommand = process.platform === 'win32' ? 'start' : 'open'
+    createAssetsList(stats)
+
     var homepagePath = require(paths.appPackageJson).homepage
     var publicPath = config.output.publicPath
     if (homepagePath && homepagePath.indexOf('.github.io/') !== -1) {
@@ -167,12 +190,6 @@ function build (previousSizeMap) {
         console.log()
       }
       console.log('The ' + chalk.cyan('build') + ' folder is ready to be deployed.')
-      console.log('You may also serve it locally with a static server:')
-      console.log()
-      console.log('  ' + chalk.cyan('npm') + ' install -g pushstate-server')
-      console.log('  ' + chalk.cyan('pushstate-server') + ' build')
-      console.log('  ' + chalk.cyan(openCommand) + ' http://localhost:9000')
-      console.log()
     }
   })
 }
