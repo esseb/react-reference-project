@@ -5,7 +5,14 @@ require('babel-register')({
   plugins: [
     [
       'babel-plugin-transform-require-ignore',
-      {extensions: ['.css', '.svg']},
+      {extensions: ['.css']},
+    ],
+    [
+      'babel-plugin-transform-assets',
+      {
+        extensions: ['.svg'],
+        name: '/static/media/[name].[hash:8].[ext]',
+      },
     ],
   ],
 })
