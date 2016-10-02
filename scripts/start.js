@@ -8,16 +8,17 @@ require('dotenv').config({silent: true})
 
 var chalk = require('chalk')
 var webpack = require('webpack')
-var WebpackDevServer = require('webpack-dev-server')
-var historyApiFallback = require('connect-history-api-fallback')
-var httpProxyMiddleware = require('http-proxy-middleware')
+var webpackDevMiddleware = require('webpack-dev-middleware')
+var webpackHotMiddleware = require('webpack-hot-middleware')
 var detect = require('detect-port')
 var clearConsole = require('react-dev-utils/clearConsole')
 var checkRequiredFiles = require('react-dev-utils/checkRequiredFiles')
 var formatWebpackMessages = require('react-dev-utils/formatWebpackMessages')
 var prompt = require('react-dev-utils/prompt')
+
 var config = require('../config/webpack.config.dev')
 var paths = require('../config/paths')
+var app = require('../server/server')
 
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
@@ -128,67 +129,27 @@ function onProxyError (proxy) {
   }
 }
 
-function addMiddleware (devServer) {
-  // `proxy` lets you to specify a fallback server during development.
-  // Every unrecognized request will be forwarded to it.
-  var proxy = require(paths.appPackageJson).proxy
-  devServer.use(historyApiFallback({
-    // Paths with dots should still use the history fallback.
-    // See https://github.com/facebookincubator/create-react-app/issues/387.
-    disableDotRule: true,
-    // For single page apps, we generally want to fallback to /index.html.
-    // However we also want to respect `proxy` for API calls.
-    // So if `proxy` is specified, we need to decide which fallback to use.
-    // We use a heuristic: if request `accept`s text/html, we pick /index.html.
-    // Modern browsers include text/html into `accept` header when navigating.
-    // However API calls like `fetch()` won’t generally accept text/html.
-    // If this heuristic doesn’t work well for you, don’t use `proxy`.
-    htmlAcceptHeaders: proxy
-      ? ['text/html']
-      : ['text/html', '*/*'],
+function runDevServer (host, port, protocol) {
+  // Hook in the webpack middlewares if we are in development mode.
+  app.use(webpackDevMiddleware(compiler, {
+    publicPath: config.output.publicPath,
+    noInfo: true,
+    quiet: true,
   }))
-  if (proxy) {
-    if (typeof proxy !== 'string') {
-      console.log(
-        chalk.red('When specified, "proxy" in package.json must be a string.')
-      )
-      console.log(
-        chalk.red('Instead, the type of "proxy" was "' + typeof proxy + '".')
-      )
-      console.log(
-        chalk.red(
-          'Either remove "proxy" from package.json,' +
-          ' or make it a string.'
-        )
-      )
-      process.exit(1)
+
+  app.use(webpackHotMiddleware(compiler))
+
+  app.listen(port, (err, result) => {
+    if (err) {
+      return console.log(err)
     }
 
-    // Otherwise, if proxy is specified, we will let it handle any request.
-    // There are a few exceptions which we won't send to the proxy:
-    // - /index.html (served as HTML5 history API fallback)
-    // - /*.hot-update.json (WebpackDevServer uses this too for hot reloading)
-    // - /sockjs-node/* (WebpackDevServer uses this for hot reloading)
-    // Tip: use https://jex.im/regulex/ to visualize the regex
-    var mayProxy = /^(?!\/(index\.html$|.*\.hot-update\.json$|sockjs-node\/)).*$/ // eslint-disable-line max-len
-    devServer.use(mayProxy,
-      // Pass the scope regex both to Express and to the middleware for proxying
-      // of both HTTP and WebSockets to work without false positives.
-      httpProxyMiddleware(pathname => mayProxy.test(pathname), {
-        target: proxy,
-        logLevel: 'silent',
-        onError: onProxyError(proxy),
-        secure: false,
-        changeOrigin: true,
-      })
-    )
-  }
-  // Finally, by now we have certainly resolved the URL.
-  // It may be /index.html, so let the dev server try serving it again.
-  devServer.use(devServer.middleware)
-}
+    clearConsole()
+    console.log(chalk.cyan('Starting the development server...'))
+    console.log()
+  })
 
-function runDevServer (host, port, protocol) {
+  /*
   var devServer = new WebpackDevServer(compiler, {
     // Silence WebpackDevServer's own logs since they're generally not useful.
     // It will still show compile warnings and errors with this setting.
@@ -243,6 +204,7 @@ function runDevServer (host, port, protocol) {
     console.log(chalk.cyan('Starting the development server...'))
     console.log()
   })
+  */
 }
 
 function run (port) {

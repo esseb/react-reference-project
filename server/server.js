@@ -14,14 +14,12 @@ app.set('views', './views')
 app.engine('.hbs', exphbs({extname: '.hbs'}))
 app.set('view engine', 'handlebars')
 
-// Set up API routes
+// REST API.
 app.use('/api/pets', pets)
 
-// Load ./views/index.hbs when a GET request is made to the homepage
+// Load ./views/index.hbs when a GET request is made to the homepage.
 app.get('/', function (req, res) {
   res.render('index.hbs', { title: 'React Reference Project' })
 })
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
-})
+module.exports = app
