@@ -108,27 +108,6 @@ function printFileSizes (stats, previousSizeMap) {
   })
 }
 
-// Create "assets.json" for use with "index.hbs"
-function createAssetsList (stats) {
-  var jsAssets = stats.toJson().assets
-    .filter(asset => /\.js$/.test(asset.name))
-    .map(asset => asset.name)
-
-  var cssAssets = stats.toJson().assets
-    .filter(asset => /\.css$/.test(asset.name))
-    .map(asset => asset.name)
-
-  var assets = {
-    js: jsAssets[0],
-    css: cssAssets[0],
-  }
-
-  var assetsListFilename = path.join(paths.appBuild, 'assets.json')
-  var assetsListContent = JSON.stringify(assets, null, 2)
-
-  fs.writeFileSync(assetsListFilename, assetsListContent)
-}
-
 // Create the production build and print the deployment instructions.
 function build (previousSizeMap) {
   console.log('Creating an optimized production build...')
@@ -146,8 +125,6 @@ function build (previousSizeMap) {
     console.log()
     printFileSizes(stats, previousSizeMap)
     console.log()
-
-    createAssetsList(stats)
 
     var homepagePath = require(paths.appPackageJson).homepage
     var publicPath = config.output.publicPath

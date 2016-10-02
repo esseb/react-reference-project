@@ -6,7 +6,9 @@
   <link rel="shortcut icon" href="/favicon.ico">
   <title>{{ title }}</title>
 {{#if assets}}
-  <link rel="stylesheet" href="{{ assets.css }}">
+  {{#each assets.css}}
+  <link rel="stylesheet" href="{{ this }}">
+  {{/each}}
 {{/if}}
 </head>
 
@@ -14,7 +16,9 @@
   <div id="root"></div>
 
 {{#if assets}}
-  <script type="text/javascript" src="{{ assets.js }}"></script>
+  {{#each assets.js}}
+  <script type="text/javascript" src="{{ this }}"></script>
+  {{/each}}
 {{else}}
   <script type="text/javascript" src="/static/js/main.js"></script>
 {{/if}}
