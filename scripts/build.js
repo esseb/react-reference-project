@@ -119,8 +119,8 @@ function createAssetsList (stats) {
     .map(asset => asset.name)
 
   var assets = {
-    js: jsAssets,
-    css: cssAssets,
+    js: jsAssets[0],
+    css: cssAssets[0],
   }
 
   var assetsListFilename = path.join(paths.appBuild, 'assets.json')

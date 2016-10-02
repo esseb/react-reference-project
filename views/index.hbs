@@ -5,10 +5,18 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="shortcut icon" href="/favicon.ico">
   <title>{{ title }}</title>
+{{#if assets}}
+  <link rel="stylesheet" href="{{ assets.css }}">
+{{/if}}
 </head>
 
 <body>
   <div id="root"></div>
+
+{{#if assets}}
+  <script type="text/javascript" src="{{ assets.js }}"></script>
+{{else}}
   <script type="text/javascript" src="/static/js/bundle.js"></script>
+{{/if}}
 </body>
 </html>
