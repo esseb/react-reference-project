@@ -72,7 +72,6 @@
   },
   "jest": {
     "moduleFileExtensions": [
-      "jsx",
       "js",
       "json"
     ],
