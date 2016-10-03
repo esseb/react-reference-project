@@ -33,7 +33,7 @@ var prompt = require('react-dev-utils/prompt')
 var config = require('../config/webpack.config.dev')
 var paths = require('../config/paths')
 var app = require('../server/server')
-var handleRender = require('./handle-render')
+var ssrHandler = require('../src/ssr-handler')
 
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
@@ -124,8 +124,8 @@ function runDevServer (host, port, protocol) {
 
   app.use(webpackHotMiddleware(compiler))
 
-  // Serve normal requests with our handleRender function.
-  app.get('*', handleRender())
+  // Serve normal requests with our ssrHandler function.
+  app.get('*', ssrHandler())
 
   // Start the server
   app.listen(port, (err, result) => {

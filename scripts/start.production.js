@@ -14,15 +14,15 @@ var clearConsole = require('react-dev-utils/clearConsole')
 
 var paths = require('../config/paths')
 var app = require('../server/server')
-var handleRender = require('../build/handle-render')
+var ssrHandler = require('../build/ssr-handler')
 
 var assets = getAssets()
 
 // Static files.
 app.use(express.static(path.join(__dirname, '../build')))
 
-// Serve normal requests with our handleRender function.
-app.get('*', handleRender(assets))
+// Serve normal requests with our ssrHandler function.
+app.get('*', ssrHandler(assets))
 
 // Get paths of JS and CSS assets from the build directory
 function getAssets () {
